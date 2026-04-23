@@ -7,37 +7,52 @@ A full-stack **ASP.NET Core 8 MVC** web application for managing clinic appointm
 ## 📸 Screenshots
 
 ### Guest Home — Sign In or Register
-![Guest Home](screenshots/04_home_guest.png)
+![Guest Home](screenshots/01_home_guest.png)
+
+### Login — Patient
+![Login Patient](screenshots/02_login_patient.png)
+
+### Login — Doctor
+![Login Doctor](screenshots/03_login_doctor.png)
+
+### Login — Admin
+![Login Admin](screenshots/08_login_admin.png)
 
 ### Patient Home — Quick Actions Dashboard
-![Patient Home](screenshots/05_home_patient.png)
+![Patient Home](screenshots/04_home_patient.png)
 
 ### Book an Appointment — Real-Time Slot Picker (AJAX)
-![Book Appointment](screenshots/06_book_appointment_slots.png)
+![Book Appointment](screenshots/05_book_appointment_slots.png)
 
 ### My Appointments — View, Cancel & Reschedule
-![My Appointments](screenshots/07_my_appointments.png)
+![My Appointments](screenshots/06_my_appointments.png)
 
 ### Doctor Home — Access Today's Schedule
-![Doctor Home](screenshots/08_home_doctor.png)
+![Doctor Home](screenshots/07_home_doctor.png)
 
 ### Doctor Schedule — Today's Appointments with Status Actions
-![Doctor Schedule](screenshots/09_doctor_schedule.png)
-
-### Admin — Doctors List
-![Admin Doctors](screenshots/11_admin_doctors_list.png)
-
-### Admin — Create Doctor with Working Hours
-![Create Doctor](screenshots/12_admin_create_doctor.png)
-
-### Admin — Manage Working Hours
-![Working Hours](screenshots/13_admin_working_hours_all.png)
+![Doctor Schedule](screenshots/16_doctor_schedule.png)
 
 ### Admin — Manage Specialties
-![Specialties](screenshots/10_admin_specialties.png)
+![Specialties](screenshots/09_admin_specialties.png)
+
+### Admin — Doctors List
+![Admin Doctors](screenshots/10_admin_doctors_list.png)
+
+### Admin — Create Doctor with Working Hours
+![Create Doctor](screenshots/11_admin_create_doctor.png)
+
+### Admin — Manage Working Hours (All Doctors)
+![Working Hours All](screenshots/12_admin_working_hours_all.png)
+
+### Admin — Add Working Hour
+![Add Working Hour](screenshots/13_admin_add_working_hour.png)
+
+### Admin — Working Hours (Filtered by Doctor)
+![Working Hours Filtered](screenshots/14_admin_working_hours_filtered.png)
 
 ### Admin — User Management (Promote / Demote)
-![Admin Users](screenshots/16_admin_users.png)
+![Admin Users](screenshots/15_admin_users.png)
 
 ---
 
