@@ -1,0 +1,34 @@
+﻿@model ClinicBooking.Controllers.CreateAdminVm
+@{
+    ViewData["Title"] = "Create Admin";
+}
+
+<h1>Create Admin</h1>
+
+<form asp-action="Create" method="post" class="card p-3" style="max-width:600px;">
+    <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input asp-for="FullName" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input asp-for="Email" type="email" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input asp-for="Password" type="password" class="form-control" required />
+        <div class="form-text">At least 6 chars; include number/symbol if your policy requires.</div>
+    </div>
+    <button class="btn btn-success">Create Admin</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="text-danger mt-3">
+        @foreach (var e in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <div>@e.ErrorMessage</div>
+        }
+    </div>
+}

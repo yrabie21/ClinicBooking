@@ -1,0 +1,86 @@
+﻿@model ClinicBooking.ViewModels.CreateDoctorVm
+@{
+    ViewData["Title"] = "Create Doctor";
+}
+
+<h2>Create Doctor</h2>
+
+<form asp-action="Create" method="post">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Full Name</label>
+            <input asp-for="FullName" class="form-control" required />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input asp-for="Email" type="email" class="form-control" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Password</label>
+            <input asp-for="Password" type="password" class="form-control" required />
+            <small class="text-muted">Minimum 6 characters (per Program.cs).</small>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Specialty</label>
+            <select asp-for="SpecialtyId" asp-items="Model.Specialties" class="form-select" required>
+                <option value="">-- Select Specialty --</option>
+            </select>
+            <span asp-validation-for="SpecialtyId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Room</label>
+            <input asp-for="Room" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Slot Minutes</label>
+            <input asp-for="SlotMinutes" type="number" min="5" step="5" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Fee</label>
+            <input asp-for="Fee" type="number" step="0.01" class="form-control" />
+        </div>
+        <h4 class="mt-4">Working Hours</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Active</th>
+                    <th>Start</th>
+                    <th>End</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.WorkingHours.Count; i++)
+                {
+                    <tr>
+                        <td>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName((DayOfWeek)Model.WorkingHours[i].DayOfWeek)</td>
+                        <td>
+                            <input asp-for="WorkingHours[@i].IsActive" type="checkbox" />
+                            <input asp-for="WorkingHours[@i].DayOfWeek" type="hidden" />
+                        </td>
+                        <td><input asp-for="WorkingHours[@i].StartTime" type="time" class="form-control" /></td>
+                        <td><input asp-for="WorkingHours[@i].EndTime" type="time" class="form-control" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="mt-4">
+        <button class="btn btn-primary">Create Doctor</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

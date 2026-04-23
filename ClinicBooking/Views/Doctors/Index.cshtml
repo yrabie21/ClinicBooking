@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ClinicBooking.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+<h1>Doctors</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No doctors found.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(m => m!.Room)</th>
+                <th>@Html.DisplayNameFor(m => m!.SlotMinutes)</th>
+                <th>@Html.DisplayNameFor(m => m!.Fee)</th>
+                <th>Doctor</th>
+                <th>Specialty</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model!)   @* '!' tells compiler Model isn't null *@
+            {
+                <tr>
+                    <td>@Html.DisplayFor(_ => item.Room)</td>
+                    <td>@Html.DisplayFor(_ => item.SlotMinutes)</td>
+                    <td>@Html.DisplayFor(_ => item.Fee)</td>
+
+                    <td>
+                        @(
+                                        item.User?.FullName
+                                        ?? item.User?.Email
+                                        ?? "(no user linked)"
+                                        )
+                </td>
+
+                    <td>@(item.Specialty?.Name ?? "(no specialty)")</td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+                }
+        </tbody>
+    </table>
+}

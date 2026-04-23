@@ -1,0 +1,35 @@
+## ASP.NET Core / Visual Studio .gitignore
+
+# Build outputs
+bin/
+obj/
+out/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+*.sln.iml
+
+# Publish profiles (contain local paths)
+**/Properties/PublishProfiles/
+
+# Runtime artifacts
+runtimes/
+
+# Secret / connection string config (use appsettings.example.json instead)
+ClinicBooking/appsettings.json
+ClinicBooking/appsettings.Development.json
+
+# NuGet
+*.nupkg
+.nuget/
+
+# OS
+.DS_Store
+Thumbs.db

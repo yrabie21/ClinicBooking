@@ -1,0 +1,76 @@
+﻿@model IEnumerable<ClinicBooking.Models.Appointment>
+@using ClinicBooking.Models
+@{
+    ViewData["Title"] = "My Schedule";
+    var date = (DateTime)ViewBag.TargetDate;
+}
+
+<h2>My Schedule (@date.ToString("yyyy-MM-dd"))</h2>
+
+@if (TempData["msg"] != null) { <div class="alert alert-success">@TempData["msg"]</div> }
+@if (TempData["err"] != null) { <div class="alert alert-danger">@TempData["err"]</div> }
+
+<form method="get" class="mb-3">
+    <input type="date" name="date" value="@date.ToString("yyyy-MM-dd")" class="form-control d-inline-block" style="max-width:200px" />
+    <button class="btn btn-primary btn-sm">Load</button>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Status</th>
+            <th style="width:320px">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var a in Model)
+{
+    var local = a.StartDateTime.ToLocalTime().ToString("HH:mm");
+    string patientName = a.Patient?.FullName ?? a.Patient?.Email ?? "(no patient user)";
+    <tr>
+        <td>@local</td>
+        <td>@patientName</td>
+        <td>@a.Doctor?.User?.FullName</td>
+        <td>
+            <span class="badge @(a.Status switch {
+                ApptStatus.Booked => "bg-info",
+                ApptStatus.CheckedIn => "bg-primary",
+                ApptStatus.Completed => "bg-success",
+                ApptStatus.Cancelled => "bg-secondary",
+                ApptStatus.NoShow => "bg-danger",
+                _ => "bg-light text-dark"
+            })">@a.Status</span>
+        </td>
+        <td>
+            @if (a.Status != ApptStatus.Cancelled && a.Status != ApptStatus.Completed)
+            {
+                <form asp-action="UpdateStatus" method="post" class="d-inline">
+                    <input type="hidden" name="id" value="@a.Id" />
+                    <input type="hidden" name="status" value="@ApptStatus.CheckedIn" />
+                    <button class="btn btn-outline-primary btn-sm">Check In</button>
+                </form>
+
+                <form asp-action="UpdateStatus" method="post" class="d-inline">
+                    <input type="hidden" name="id" value="@a.Id" />
+                    <input type="hidden" name="status" value="@ApptStatus.Completed" />
+                    <button class="btn btn-outline-success btn-sm">Complete</button>
+                </form>
+            }
+
+            @if (a.Status == ApptStatus.Booked || a.Status == ApptStatus.CheckedIn)
+            {
+                <form asp-action="UpdateStatus" method="post" class="d-inline">
+                    <input type="hidden" name="id" value="@a.Id" />
+                    <input type="hidden" name="status" value="@ApptStatus.NoShow" />
+                    <button class="btn btn-outline-danger btn-sm"
+                            onclick="return confirm('Mark as No-Show?')">No-Show</button>
+                </form>
+            }
+        </td>
+    </tr>
+}
+    </tbody>
+</table>

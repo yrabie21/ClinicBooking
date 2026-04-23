@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Book Appointment";
+    var specs = ViewBag.Specialties as List<ClinicBooking.Models.Specialty>;
+}
+<h2>Book Appointment</h2>
+<div class="row g-2">
+    <div class="col-md-3">
+        <label>Specialty</label>
+        <select id="spec" class="form-select">
+            <option value="">-- choose --</option>
+            @foreach (var s in specs!)
+            {
+                <option value="@s.Id">@s.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label>Doctor</label>
+        <select id="doc" class="form-select"><option value="">-- choose --</option></select>
+    </div>
+    <div class="col-md-3">
+        <label>Date</label>
+        <input id="date" type="date" class="form-control" />
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button id="load" class="btn btn-primary w-100">Show Free Slots</button>
+    </div>
+</div>
+<hr />
+<div id="slots" class="d-flex flex-wrap gap-2"></div>
+<form id="bookForm" method="post" asp-controller="Appointments" asp-action="Book">
+    <input type="hidden" name="doctorId" id="doctorId" />
+    <input type="hidden" name="start" id="start" />
+</form>
+@section Scripts {
+    <script>
+        const spec=document.getElementById('spec'), doc=document.getElementById('doc'),
+              date=document.getElementById('date'), load=document.getElementById('load'),
+              slots=document.getElementById('slots');
+        spec.addEventListener('change', async ()=>{
+          doc.innerHTML='<option value="">-- choose --</option>';
+          if(!spec.value) return;
+          const res=await fetch(`/Appointments/DoctorsBySpecialty/${spec.value}`);
+          const data=await res.json();
+          for(const d of data){ const o=document.createElement('option'); o.value=d.id; o.textContent=d.name; doc.appendChild(o); }
+        });
+        load.addEventListener('click', async ()=>{
+          slots.innerHTML=''; if(!doc.value||!date.value) return;
+          const res=await fetch(`/Appointments/FreeSlots?doctorId=${doc.value}&date=${date.value}`);
+          const data=await res.json();
+          if(data.length===0){ slots.textContent='No free slots.'; return; }
+          for(const s of data){
+            const b=document.createElement('button'); b.type='button'; b.className='btn btn-outline-success';
+            b.textContent=new Date(s).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+            b.onclick=()=>{ document.getElementById('doctorId').value=doc.value; document.getElementById('start').value=s; document.getElementById('bookForm').submit(); };
+            slots.appendChild(b);
+          }
+        });
+    </script>
+}

@@ -1,0 +1,42 @@
+﻿@model ClinicBooking.Models.DoctorWorkingHour
+
+@{
+    ViewData["Title"] = "Working Hour Details";
+}
+
+<h1>Working Hour Details</h1>
+
+@if (Model is null)
+{
+    <div class="alert alert-warning">Record not found.</div>
+}
+else
+{
+    <div>
+        <h4>Doctor Working Hour</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">@Html.DisplayNameFor(m => m.DayOfWeek)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(m => m!.DayOfWeek)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(m => m.StartTime)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(m => m!.StartTime)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(m => m.EndTime)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(m => m!.EndTime)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(m => m.IsActive)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(m => m!.IsActive)</dd>
+
+            <dt class="col-sm-2">Doctor</dt>
+            <dd class="col-sm-10">
+                @((Model.Doctor?.User?.FullName ?? Model.Doctor?.User?.Email) ?? "(no doctor linked)")
+            </dd>
+        </dl>
+    </div>
+
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+}

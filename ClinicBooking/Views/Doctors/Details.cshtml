@@ -1,0 +1,40 @@
+﻿@model ClinicBooking.Models.Doctor
+
+@{
+    ViewData["Title"] = "Doctor Details";
+}
+
+<h1>Doctor Details</h1>
+
+@if (Model is null)
+{
+    <div class="alert alert-warning">Doctor not found.</div>
+}
+else
+{
+    <div>
+        <h4>Doctor</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">@Html.DisplayNameFor(m => m.Room)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(m => m!.Room)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(m => m.SlotMinutes)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(m => m!.SlotMinutes)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(m => m.Fee)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(m => m!.Fee)</dd>
+
+            <dt class="col-sm-2">User</dt>
+            <dd class="col-sm-10">@((Model.User?.FullName ?? Model.User?.Email) ?? "(no user linked)")</dd>
+
+            <dt class="col-sm-2">Specialty</dt>
+            <dd class="col-sm-10">@((Model.Specialty?.Name) ?? "(no specialty)")</dd>
+        </dl>
+    </div>
+
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+}

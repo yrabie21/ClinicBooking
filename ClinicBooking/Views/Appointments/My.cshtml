@@ -1,0 +1,94 @@
+﻿@model IEnumerable<ClinicBooking.Models.Appointment>
+@{
+    ViewData["Title"] = "My Appointments";
+}
+<h2>My Appointments</h2>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success">@TempData["msg"]</div>
+}
+@if (TempData["err"] != null)
+{
+    <div class="alert alert-danger">@TempData["err"]</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Doctor</th>
+            <th>When</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model)
+        {
+            <tr>
+                <td>@a.Doctor!.User!.FullName</td>
+                <td>@a.StartDateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@a.Status</td>
+                <td>
+                    @if (a.Status == ClinicBooking.Models.ApptStatus.Booked
+                                    && a.StartDateTime > DateTime.UtcNow.AddHours(1))
+                    {
+                        <!-- Cancel -->
+                        <form method="post" asp-action="Cancel" asp-route-id="@a.Id"
+                              onsubmit="return confirm('Cancel this appointment?')" style="display:inline">
+                            <button class="btn btn-sm btn-outline-danger">Cancel</button>
+                        </form>
+
+                        <!-- Reschedule -->
+                        <form method="post" asp-action="Reschedule" style="display:inline" class="reschedule-form" data-doctor="@a.DoctorId" data-appt="@a.Id">
+                            <input type="hidden" name="id" value="@a.Id" />
+
+                            <!-- Date Picker -->
+                            <input type="date" class="form-control form-control-sm reschedule-date" required />
+
+                            <!-- Slots Dropdown -->
+                            <select name="newStart" class="form-select form-select-sm slot-dropdown" required>
+                                <option value="">-- Select new slot --</option>
+                            </select>
+
+                            <button class="btn btn-sm btn-outline-warning">Reschedule</button>
+                        </form>
+
+
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".reschedule-form").forEach(form => {
+                const doctorId = form.getAttribute("data-doctor");
+                const dateInput = form.querySelector(".reschedule-date");
+                const dropdown = form.querySelector(".slot-dropdown");
+
+                // When user picks a new date → load slots
+                dateInput.addEventListener("change", function () {
+                    const selectedDate = this.value; // yyyy-MM-dd
+                    if (!selectedDate) return;
+
+                    fetch(`/Appointments/FreeSlots?doctorId=${doctorId}&date=${selectedDate}`)
+                        .then(resp => resp.json())
+                        .then(slots => {
+                            dropdown.innerHTML = "<option value=''>-- Select new slot --</option>";
+                            slots.forEach(s => {
+                                const opt = document.createElement("option");
+                                opt.value = s;
+                                opt.textContent = s;
+                                dropdown.appendChild(opt);
+                            });
+                        })
+                        .catch(err => console.error("Error loading slots:", err));
+                });
+            });
+        });
+    </script>
+}
+

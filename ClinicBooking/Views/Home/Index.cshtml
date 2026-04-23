@@ -1,0 +1,156 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ClinicBooking.Models
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Clinic Booking System";
+    var currentUser = await UserManager.GetUserAsync(User);
+    var displayName = currentUser?.FullName ?? currentUser?.Email ?? "Guest";
+
+    var isAuthed = User.Identity?.IsAuthenticated ?? false;
+    var isAdmin = User.IsInRole("Admin");
+    var isDoctor = User.IsInRole("Doctor");
+    var isPatient = isAuthed && !isDoctor && !isAdmin; // simple split: logged-in non-admin, non-doctor
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-2">Welcome back, @displayName</h1>
+    <p class="text-center text-muted">Quick actions based on your role.</p>
+
+    <!-- ===== Guest (not logged in) ===== -->
+    @if (!isAuthed)
+    {
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">Sign in</h3>
+                        <p class="card-text">Access booking and manage your appointments.</p>
+                        <a class="btn btn-primary w-100" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">Register</h3>
+                        <p class="card-text">Create an account to start booking.</p>
+                        <a class="btn btn-outline-secondary w-100" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- ===== Patient actions ===== -->
+    @if (isPatient)
+    {
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">Book an Appointment</h3>
+                        <p class="card-text">Find available slots and book with a doctor.</p>
+                        <a class="btn btn-primary w-100"
+                           asp-controller="Appointments" asp-action="Search">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">My Appointments</h3>
+                        <p class="card-text">View, reschedule, or cancel your appointments.</p>
+                        <a class="btn btn-success w-100"
+                           asp-controller="Appointments" asp-action="My">
+                            View My Appointments
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- ===== Doctor actions ===== -->
+    @if (isDoctor)
+    {
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">My Schedule</h3>
+                        <p class="card-text">See today’s schedule and update statuses.</p>
+                        <a class="btn btn-primary w-100"
+                           asp-controller="DoctorSchedule" asp-action="Today">
+                            Open My Schedule
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- ===== Admin panel ===== -->
+    @if (isAdmin)
+    {
+        <hr class="my-5" />
+        <h2 class="text-center mb-4">Admin Panel</h2>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Specialties</h5>
+                        <p class="card-text">Manage medical specialties.</p>
+                        <a class="btn btn-outline-dark w-100"
+                           asp-controller="Specialties" asp-action="Index">Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Doctors</h5>
+                        <p class="card-text">Add and update doctor information.</p>
+                        <a class="btn btn-outline-dark w-100"
+                           asp-controller="Doctors" asp-action="Index">Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Working Hours</h5>
+                        <p class="card-text">Set available times for doctors.</p>
+                        <a class="btn btn-outline-dark w-100"
+                           asp-controller="DoctorWorkingHours" asp-action="Index">Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Admin Users</h5>
+                        <p class="card-text">Add/remove admins and view current admins.</p>
+                        <a class="btn btn-outline-dark w-100"
+                           asp-controller="AdminUsers" asp-action="Index">Manage</a>
+                    </div>
+                </div>
+            </div>
+
+            @* Optional quick link: as Admin you can also view doctors’ schedules *@
+            <div class="col-md-3 mb-4">
+                <div class="card shadow h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Doctors' Schedules</h5>
+                        <p class="card-text">Browse appointments by date.</p>
+                        <a class="btn btn-outline-secondary w-100"
+                           asp-controller="DoctorSchedule" asp-action="Today">Open</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

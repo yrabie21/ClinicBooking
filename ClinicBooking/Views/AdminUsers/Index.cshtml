@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ClinicBooking.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Admin Users";
+    var count = (int)(ViewBag.Count ?? 0);
+}
+
+<h1>Admin Users (@count)</h1>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success">@TempData["msg"]</div>
+}
+@if (TempData["err"] != null)
+{
+    <div class="alert alert-danger">@TempData["err"]</div>
+}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="PromoteExisting" method="post" class="row g-2">
+            <div class="col-md-6">
+                <input type="email" name="email" class="form-control" placeholder="user@example.com" required />
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary w-100">Promote Existing User to Admin</button>
+            </div>
+            <div class="col-md-3">
+                <a asp-action="Create" class="btn btn-outline-success w-100">Create New Admin</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No admins yet.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Id</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in Model!)
+            {
+                <tr>
+                    <td>@(u.FullName ?? "(no name)")</td>
+                    <td>@u.Email</td>
+                    <td>@u.Id</td>
+                    <td class="text-end">
+                        <form asp-action="Demote" asp-route-id="@u.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Remove admin role from @u.Email ?');">
+                            <button class="btn btn-sm btn-warning">Demote</button>
+                        </form>
+                        <form asp-action="Delete" asp-route-id="@u.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete @u.Email ?');">
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
