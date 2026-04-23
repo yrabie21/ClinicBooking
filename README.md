@@ -4,6 +4,43 @@ A full-stack **ASP.NET Core 8 MVC** web application for managing clinic appointm
 
 ---
 
+## 📸 Screenshots
+
+### Guest Home — Sign In or Register
+![Guest Home](screenshots/04_home_guest.png)
+
+### Patient Home — Quick Actions Dashboard
+![Patient Home](screenshots/05_home_patient.png)
+
+### Book an Appointment — Real-Time Slot Picker (AJAX)
+![Book Appointment](screenshots/06_book_appointment_slots.png)
+
+### My Appointments — View, Cancel & Reschedule
+![My Appointments](screenshots/07_my_appointments.png)
+
+### Doctor Home — Access Today's Schedule
+![Doctor Home](screenshots/08_home_doctor.png)
+
+### Doctor Schedule — Today's Appointments with Status Actions
+![Doctor Schedule](screenshots/09_doctor_schedule.png)
+
+### Admin — Doctors List
+![Admin Doctors](screenshots/11_admin_doctors_list.png)
+
+### Admin — Create Doctor with Working Hours
+![Create Doctor](screenshots/12_admin_create_doctor.png)
+
+### Admin — Manage Working Hours
+![Working Hours](screenshots/13_admin_working_hours_all.png)
+
+### Admin — Manage Specialties
+![Specialties](screenshots/10_admin_specialties.png)
+
+### Admin — User Management (Promote / Demote)
+![Admin Users](screenshots/16_admin_users.png)
+
+---
+
 ## ✨ Features
 
 ### Patient
@@ -14,11 +51,12 @@ A full-stack **ASP.NET Core 8 MVC** web application for managing clinic appointm
 
 ### Doctor
 - View today's scheduled appointments dashboard
+- Check In / Complete / No-Show status actions per appointment
 
 ### Admin
 - Full CRUD for Doctors, Specialties, and Users
 - Set doctor working hours per day of the week (with configurable slot durations)
-- Manage time-off periods
+- Promote/demote users to Admin role
 
 ### System
 - **Race-condition-safe booking** using `IsolationLevel.Serializable` DB transactions + filtered unique index on `(DoctorId, StartDateTime)` — prevents double-booking even under concurrent requests
@@ -50,7 +88,7 @@ A full-stack **ASP.NET Core 8 MVC** web application for managing clinic appointm
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/ClinicBooking.git
+   git clone https://github.com/yrabie21/ClinicBooking.git
    cd ClinicBooking
    ```
 
