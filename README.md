@@ -166,6 +166,12 @@ ClinicBooking/
 
 ---
 
+## 👤 Author
+
+**Youssef Mohamed Rabie** — [GitHub](https://github.com/yrabie21)
+
+---
+
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
